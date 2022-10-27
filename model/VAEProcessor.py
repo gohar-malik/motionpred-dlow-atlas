@@ -63,6 +63,7 @@ class ModelProcessor(BaseProcessor):
         X, Z = self.preprocess(data, t_his)
         
         Y = self.model.execute([X, Z])
+        # Y = np.zeros((100,1,48))
         if Y is None:
             return Y
         

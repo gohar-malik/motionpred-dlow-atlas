@@ -62,7 +62,7 @@ if __name__ == '__main__':
 
         "vae":
         {
-            "model_path": "checkpoints/vae_0500.om",
+            "model_path": "checkpoints/vae_0500_input.om",
             "batch_size": 10,
             "num_seeds": 1,
             "nz": 128,
