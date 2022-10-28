@@ -61,8 +61,8 @@ class ModelProcessor(BaseProcessor):
 
     def predict(self, data, t_his, concat_hist):
         X, Z = self.preprocess(data, t_his)
-        
-        Y = self.model.execute([X, Z])
+        print(X.shape, Z.shape)
+        Y = self.model.execute([X, Z])[0]
         # Y = np.zeros((100,1,48))
         if Y is None:
             return Y
