@@ -32,14 +32,17 @@ class ModelProcessor(BaseProcessor):
         self.validate()
         super().__init__(params)
         
+        self.use_dlow = params["use_dlow"]
         self.batch_size = params["batch_size"]
         self.num_seeds = params["num_seeds"]
         self.nz = params["nz"]
         
         
     def validate(self):
-        if not os.path.exists(self.params['model_path']):
-            raise FileNotFoundError('Model Path not found, please check again.')
+        if not os.path.exists(self.params['vae_model_path']):
+            raise FileNotFoundError('VAE Model Path not found, please check again.')
+        if not os.path.exists(self.params['dlow_model_path']):
+            raise FileNotFoundError('Dlow Model Path not found, please check again.')
         if 'batch_size' not in self.params:
             raise Exception('Please specify batch_size for model in params')
 
@@ -60,9 +63,17 @@ class ModelProcessor(BaseProcessor):
         print("Release acl resource success")
 
     def predict(self, data, t_his, concat_hist):
-        X, Z = self.preprocess(data, t_his)
-        print(X.shape, Z.shape)
-        Y = self.model.execute([X, Z])[0]
+        X = self.preprocess(data, t_his)
+
+        if self.use_dlow:
+            X_dlow = np.expand_dims(X[:,0,:], axis=1)
+            Z_dlow = np.random.randn(1, self.nz).astype("float32")
+            Z = self.dlow_model.execute([X_dlow, Z_dlow])[0]
+        else:
+            Z = np.random.randn(X.shape[1], self.nz).astype("float32")
+
+        # print(X.shape, Z.shape)
+        Y = self.vae_model.execute([X, Z])[0]
         # Y = np.zeros((100,1,48))
         if Y is None:
             return Y
@@ -75,12 +86,11 @@ class ModelProcessor(BaseProcessor):
         traj = np.transpose(traj_np, (1, 0, 2))
         X = traj[:t_his]
         X = np.tile(X, (1, self.batch_size * self.num_seeds, 1))
-        Z = np.random.randn(X.shape[1], self.nz).astype("float32")
         
         # X = np.load("X.npy")
         # Z = np.load("Z.npy")
         
-        return X, Z
+        return X
         
     def postprocess(self, X, Y, concat_hist):
         if concat_hist:

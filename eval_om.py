@@ -48,10 +48,18 @@ def compute_fde(pred, gt):
     return dist.min()
 
 if __name__ == '__main__':
-
+    print(f"Process ID: {os.getpid()}\n")
+    # print(os.__file__)
     # algos= ["dlow", "vae"]
-    algos = ["vae"]
+    algos = ["dlow"]
     
+    # model_type = ""
+    # model_type = "allow_mix_precision"
+    # model_type = "allow_fp32_to_fp16"
+    # model_type = "must_keep_origin_dtype"
+    # model_type = "force_fp32"
+    model_type = "force_fp16"
+
     params = {   
         "data": "test",
         "t_his": 25,
@@ -61,18 +69,15 @@ if __name__ == '__main__':
         "concat_hist": False,
         "result_dir": "results",
 
-        "vae":
+        "model":
         {
-            "model_path": "checkpoints/vae_0500_batch10.om",
+            "vae_model_path": f"checkpoints/vae_0500_batch10_{model_type}.om",
+            "dlow_model_path": f"checkpoints/dlow_0500_xandz_{model_type}.om",
+            "use_dlow": True,
             "batch_size": 10,
             "num_seeds": 1,
             "nz": 128,
-        }
-
-        # , "dlow":
-        # "batch_size": 10
-        # "model_paths": ["checkpoints/vae_0500.om"]
-        # }      
+        }     
     }
 
     np.random.seed(params["seed"])
@@ -86,7 +91,7 @@ if __name__ == '__main__':
     # traj_gt_arr = get_multimodal_gt()
 
     """model"""
-    processors = {"vae": ModelProcessor(params["vae"])}
+    processor = ModelProcessor(params["model"])
 
     """stats init"""
     stats_func = {'Diversity': compute_diversity, 'ADE': compute_ade,
@@ -97,12 +102,13 @@ if __name__ == '__main__':
     """inference"""
     data_gen = dataset.iter_generator(step=params["t_his"])
     num_samples = 0
-    num_seeds = params["vae"]["num_seeds"]
+    num_seeds = params["model"]["num_seeds"]
 
     seconds = 0
     for i, data in enumerate(data_gen):
-        if i > 49:
-            break
+        # if i > 49:
+        #     break
+        
         # data = np.load('data.npy')
         num_samples += 1
         gt = get_gt(data, params["t_his"])
@@ -110,7 +116,7 @@ if __name__ == '__main__':
         
         begin = time.time()
         for algo in algos:
-            pred = processors[algo].predict(data, params["t_his"], params["concat_hist"])
+            pred = processor.predict(data, params["t_his"], params["concat_hist"])
             if pred is None:
                 print("!!!!! OM Model execution Failed !!!!!")
                 exit()
@@ -130,13 +136,15 @@ if __name__ == '__main__':
         # break
 
     logger.info('=' * 80)
+    logger.info(f"Model type: {model_type}")
     for stats in stats_names:
         str_stats = f'Total {stats}: ' + ' '.join([f'{x}: {y.avg:.4f}' for x, y in stats_meter[stats].items()])
         logger.info(str_stats)
+    logger.info(f"Latency = {seconds/num_samples} secs")
     logger.info('=' * 80)
-    print(i)
+    print(num_samples)
     print(seconds)
-    logger.info(f"FPS = {i/seconds}")
+    
 
     # with open('%s/stats_%s.csv' % (cfg.result_dir, args.num_seeds), 'w') as csv_file:
     #     writer = csv.DictWriter(csv_file, fieldnames=['Metric'] + algos)

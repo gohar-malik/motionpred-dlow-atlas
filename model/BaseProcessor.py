@@ -27,7 +27,9 @@ class BaseProcessor:
         # Initialize ACL Resources
         self._acl_resource = AclResource()
         self._acl_resource.init()
-        self.model = Model(params['model_path'])
+        self.vae_model = Model(params['vae_model_path'])
+        if params["use_dlow"]:
+            self.dlow_model = Model(params['dlow_model_path'])
 
     @abstractmethod
     def preprocess(self):
