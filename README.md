@@ -4,6 +4,9 @@ This repository provides code for the ECE 740 course project, 3D Human Motion Pr
 ## Datasets
 Please follow the data preprocessing steps ([DATASETS.md](https://github.com/facebookresearch/VideoPose3D/blob/master/DATASETS.md)) inside the [VideoPose3D](https://github.com/facebookresearch/VideoPose3D) repo. Place the prepocessed data data_3d_h36m.npz (Human3.6M) and data_3d_humaneva15.npz (HumanEva-I) under the data folder.
 
+## Pretrained models
+The pretrained models are provided in the `checkpoints` dir.
+
 ## Inference on Huawei Atlas 200 DK
 To perform inference using the model on the device, run the following script.
 
