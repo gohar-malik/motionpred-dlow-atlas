@@ -2,7 +2,7 @@
 This repository provides code for the ECE 740 course project, 3D Human Motion Prediction on Edge. In this project, we develop a 3d human motion prediction model for the Huawei Atlas 200 DK. 
 
 ## Datasets
-Please follow the data preprocessing steps ([DATASETS.md](https://github.com/facebookresearch/VideoPose3D/blob/master/DATASETS.md)) inside the [VideoPose3D](https://github.com/facebookresearch/VideoPose3D) repo. Place the prepocessed data data_3d_h36m.npz (Human3.6M) and data_3d_humaneva15.npz (HumanEva-I) under the data folder.
+Please follow the data preprocessing steps for Human3.6M from ([DATASETS.md](https://github.com/facebookresearch/VideoPose3D/blob/master/DATASETS.md)) inside the [VideoPose3D](https://github.com/facebookresearch/VideoPose3D) repo. Place the prepocessed data data_3d_h36m.npz (Human3.6M) under the data folder.
 
 ## Pretrained models
 The pretrained models are provided in the `checkpoints` dir.
