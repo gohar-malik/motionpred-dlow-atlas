@@ -18,9 +18,9 @@ There are three quantization configurations used for the model deployment. These
 
 | Name        | Description           | 
 | ------------- |:-------------:| 
-| force_fp32      | All the weights are quantized to float32 | 
-| force_fp32      | Weights of some important layers are quantized to float32, others to float16      |   
-| allow_fp32_to_fp16 |  All the weights are quantized to float16      |   
+| force_fp32 | All layers quantized to 32 bit floating point | 
+| mix_precision | Only initial layers quantized to 16 bit, rest quantized to 32 bit |   
+|force_fp16 | All layers quantized to 16 bit floating point |   
 
 ## Acknowledgement
 The model used in this project and the code is based on the [DLow](https://github.com/Khrylx/DLow) repo. Special thanks to the authors.
