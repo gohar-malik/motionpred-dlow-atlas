@@ -14,7 +14,7 @@ To perform inference using the model on the device, run the following script.
 python3 eval_om.py
 ```
 
-There are three quantization configurations used for the model deployment. These configurations are explained in the below table. To use any of these configuratios, please modify the model argument in line 61 of the `eval_om.py` file, [here](https://github.com/gohar-malik/motionpred-dlow-atlas/blob/main/eval_om.py#:~:text=model_type%20%3D%20%22force_fp16%22)
+There are three quantization configurations used for the model deployment. These configurations are explained in the below table. To use any of these configuratios, please modify the model argument in line 59 of the `eval_om.py` file, [here](https://github.com/gohar-malik/motionpred-dlow-atlas/blob/c0cb23a2ed4ca69f6b086c91630b165ec8786b2d/eval_om.py#L59)
 
 | Name        | Description           | 
 | ------------- |:-------------:| 
