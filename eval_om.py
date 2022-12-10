@@ -54,9 +54,7 @@ if __name__ == '__main__':
     algos = ["dlow"]
     
     # model_type = ""
-    # model_type = "allow_mix_precision"
-    # model_type = "allow_fp32_to_fp16"
-    # model_type = "must_keep_origin_dtype"
+    # model_type = "mix_precision"
     # model_type = "force_fp32"
     model_type = "force_fp16"
 
